@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu 2025 Wrapped</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        :root {
+            --spotify-green: #1DB954;
+            --spotify-black: #191414;
+            --wrapped-purple: #8C52FF;
+            --wrapped-pink: #FF0055;
+            --wrapped-yellow: #FFD600;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--spotify-black);
+            font-family: 'Montserrat', sans-serif;
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .background-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #FF0055, #8C52FF, #1DB954);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .phone-container {
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .progress-container {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            z-index: 10;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .slide {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            text-align: center;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--wrapped-yellow);
+        }
+
+        p {
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+
+        .big-number {
+            font-size: 5rem;
+            font-weight: 900;
+            color: var(--wrapped-yellow);
+            display: block;
+            margin: 20px 0;
+        }
+
+        /* Imágenes */
+        .artist-img, .cover-img {
+            width: 250px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin: 20px 0;
+        }
+
+        .artist-img {
+            border-radius: 50%; 
+        }
+
+        /* Botón Final */
+        .play-btn {
+            background-color: var(--spotify-green);
+            color: black;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 30px;
+            transform: scale(1);
+            transition: transform 0.2s;
+            box-shadow: 0 5px 20px rgba(29, 185, 84, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .play-icon {
+            width: 0; 
+            height: 0; 
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 16px solid black;
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hidden { display: none; }
+
+    </style>
+</head>
+<body>
+
+    <div class="background-gradient"></div>
+
+    <div class="phone-container" id="app">
+        <div class="progress-container">
+            <div class="progress-bar"><div class="progress-fill" id="p1"></div></div>
+            <div class="progress-bar"><div class="progress-fill" id="p2"></div></div>
+            <div class="progress-bar"><div class="progress-fill" id="p3"></div></div>
+            <div class="progress-bar"><div class="progress-fill" id="p4"></div></div>
+        </div>
+
+        <div class="slide active" id="slide1">
+            <h2>En el 2025...</h2>
+            <h1>Mi top artista fuiste tú.</h1>
+            <img src="melisa.jfif" class="artist-img" alt="Foto de ella">
+            <p>Obvio, me gusta mucho escucharte hablar.</p>
+            <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 50px;">(Toca la pantalla para continuar)</p>
+        </div>
+
+        <div class="slide" id="slide2">
+            <h1>Pasaste mucho tiempo escuchando...</h1>
+            <p>Mis autistadas que te contaba de Metal Gear Solid</p>
+            <span class="big-number">192,000</span>
+            <p>Minutos escuchándome hablar de juegos (dudando si tengo algún espectro...).</p>
+            <p style="color: var(--wrapped-pink); font-weight: bold; margin-top: 20px;">Eres increíble y muy atenta.</p>
+        </div> 
+
+        <div class="slide" id="slide3">
+            <h2>Tu canción top 1</h2>
+            <img src="nosotres.jfif" class="cover-img" alt="Foto Juntos">
+            <h1>"Nuestras payasadas del Diario"</h1>
+            <p>Artista: Melissonia y Abraham Games <br> Album: Los Chinconcuas de La Paz</p>
+        </div>
+
+        <div class="slide" id="slide4">
+            <h2>Solo falta un track...</h2>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/2048px-Spotify_logo_without_text.svg.png" style="width: 80px; margin: 20px 0;" alt="Logo">
+            <h1>Propuesta: ¿Quereis ser mi San Valentín?</h1>
+            <p>Feat. Zumaya Games</p>
+            
+            <a href="https://open.spotify.com/playlist/7Ko1YukSL3DETEQz6VsQLu?si=a3eb1c720cc44456" style="text-decoration: none;">
+                <button class="play-btn" onclick="celebrate()">
+                <div class="play-icon"></div>
+                Reproducir (SÍ)
+                </button>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progressFills = document.querySelectorAll('.progress-fill');
+        const totalSlides = slides.length;
+
+        document.getElementById('app').addEventListener('click', (e) => {
+            if(e.target.closest('.play-btn')) return;
+
+            if (currentSlide < totalSlides - 1) {
+                nextSlide();
+            }
+        });
+
+        function nextSlide() {
+            progressFills[currentSlide].style.width = '100%';
+            
+            slides[currentSlide].classList.remove('active');
+            
+            currentSlide++;
+            
+            slides[currentSlide].classList.add('active');
+        }
+
+        function celebrate() {
+            const btn = document.querySelector('.play-btn');
+            btn.innerHTML = "¡CITA AGENDADA! ❤️";
+            btn.style.backgroundColor = "white";
+            btn.style.color = "black";
+            
+            var duration = 5 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+            return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+            var timeLeft = animationEnd - Date.now();
+
+            if (timeLeft <= 0) {
+                return clearInterval(interval);
+            }
+
+            var particleCount = 50 * (timeLeft / duration);
+            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+    </script>
+</body>
+</html>
